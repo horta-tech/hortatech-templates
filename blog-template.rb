@@ -7,21 +7,25 @@ file 'Gemfile', <<-RUBY
 source 'https://rubygems.org'
 ruby '#{RUBY_VERSION}'
 
-#{"gem 'bootsnap', require: false" if Rails.version >= "5.2"}
-gem 'devise'
-gem 'jbuilder', '~> 2.0'
+gem 'rails', '#{Rails.version}'
 gem 'pg', '~> 0.21'
 gem 'puma'
-gem 'rails', '#{Rails.version}'
 gem 'redis'
-
-gem 'autoprefixer-rails'
-gem 'bootstrap-sass', '~> 3.3'
-gem 'font-awesome-sass', '~> 5.0.9'
-gem 'sassc-rails'
-gem 'simple_form'
 gem 'uglifier'
 gem 'webpacker'
+gem 'jbuilder', '~> 2.5'
+gem 'sass-rails'
+#{"gem 'bootsnap', require: false" if Rails.version >= "5.2"}
+
+gem 'bootstrap'
+gem 'devise'
+gem 'font-awesome-sass'
+gem 'simple_form'
+gem 'autoprefixer-rails'
+gem 'jquery-rails'
+gem 'carrierwave'
+gem 'mini_magick'
+gem 'fog-aws'
 
 group :development do
   gem 'web-console', '>= 3.3.0'
@@ -31,8 +35,6 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'listen', '~> 3.0.5'
-  gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'dotenv-rails'
 end
 RUBY
@@ -238,5 +240,5 @@ JS
   ########################################
   git :init
   git add: '.'
-  git commit: "-m 'Initial commit with devise, webpack, jquery, bootstrap 4"
+  git commit: "-m 'Initial commit with devise, webpack, jquery, bootstrap 4'"
 end

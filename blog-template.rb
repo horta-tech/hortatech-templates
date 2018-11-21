@@ -2,7 +2,7 @@ run 'pgrep spring | xargs kill -9'
 
 # GEMFILE
 ########################################
-run 'rm Gemfile'
+run 'rm -rf Gemfile'
 file 'Gemfile', <<-RUBY
 source 'https://rubygems.org'
 ruby '#{RUBY_VERSION}'
@@ -125,13 +125,15 @@ file 'app/views/shared/_flashes.html.erb', <<-HTML
 <% end %>
 HTML
 
-run 'curl -L https://raw.githubusercontent.com/lewagon/awesome-navbars/master/templates/_navbar_wagon.html.erb > app/views/shared/_navbar.html.erb'
-run 'curl -L https://raw.githubusercontent.com/lewagon/rails-templates/master/logo.png > app/assets/images/logo.png'
+run 'curl -L https://raw.githubusercontent.com/Rayancdc/hortatech-templates/master/_navbar_hortatech.html.erb?token=AkvCHMs_D7irO0bMGOILbz5gRRiRvyMZks5b_qtowA%3D%3D > app/views/shared/_navbar.html.erb'
+run 'curl -L https://raw.githubusercontent.com/Rayancdc/hortatech-templates/master/logo.png?token=AkvCHIR5OA9Eo3m-Y_u2lAn74RNxI0yXks5b_quhwA%3D%3D > app/assets/images/logo.png'
+run 'curl -L https://raw.githubusercontent.com/Rayancdc/hortatech-templates/master/icon.png?token=AkvCHIR5OA9Eo3m-Y_u2lAn74RNxI0yXks5b_quhwA%3D%3D > app/assets/images/icon.png'
+
 
 # README
 ########################################
 markdown_file_content = <<-MARKDOWN
-Rails app generated with [lewagon/rails-templates](https://github.com/lewagon/rails-templates), created by the [Le Wagon coding bootcamp](https://www.lewagon.com) team.
+Rails app generated with Hortatech Template, created by Rayancdc.
 MARKDOWN
 file 'README.md', markdown_file_content, force: true
 
@@ -222,7 +224,7 @@ RUBY
   # Webpacker / Yarn
   ########################################
   run 'rm app/javascript/packs/application.js'
-  run 'yarn add jquery bootstrap@3'
+  run 'yarn add bootstrap jquery popper.js typed.js'
   file 'app/javascript/packs/application.js', <<-JS
 import "bootstrap";
 JS
@@ -253,5 +255,5 @@ JS
   ########################################
   git :init
   git add: '.'
-  git commit: "-m 'Initial commit with devise template from https://github.com/lewagon/rails-templates'"
+  git commit: "-m 'Initial commit with devise, webpack, jquery, bootstrap 4"
 end

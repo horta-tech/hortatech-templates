@@ -53,8 +53,8 @@ YAML
 ########################################
 run 'rm -rf app/assets/stylesheets'
 run 'rm -rf vendor'
-run 'curl -L https://github.com/Rayancdc/hortatech-templates/raw/master/stylesheets.zip > stylesheets.zip'
-run 'unzip stylesheets.zip -d app/assets && rm stylesheets.zip'
+run 'curl -L https://github.com/Rayancdc/stylesheets/archive/master.zip > stylesheets.zip'
+run 'unzip stylesheets.zip -d app/assets && rm stylesheets.zip && mv app/assets/stylesheets-master app/assets/stylesheets'
 run 'rm app/assets/javascripts/application.js'
 file 'app/assets/javascripts/application.js', <<-JS
 //= require jquery

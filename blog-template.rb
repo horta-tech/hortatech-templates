@@ -7,25 +7,21 @@ file 'Gemfile', <<-RUBY
 source 'https://rubygems.org'
 ruby '#{RUBY_VERSION}'
 
-gem 'rails', '#{Rails.version}'
+#{"gem 'bootsnap', require: false" if Rails.version >= "5.2"}
+gem 'devise'
+gem 'jbuilder', '~> 2.0'
 gem 'pg', '~> 0.21'
 gem 'puma'
+gem 'rails', '#{Rails.version}'
 gem 'redis'
+
+gem 'autoprefixer-rails'
+gem 'bootstrap-sass', '~> 3.3'
+gem 'font-awesome-sass', '~> 5.0.9'
+gem 'sassc-rails'
+gem 'simple_form'
 gem 'uglifier'
 gem 'webpacker'
-gem 'jbuilder', '~> 2.5'
-gem 'sass-rails'
-#{"gem 'bootsnap', require: false" if Rails.version >= "5.2"}
-
-gem 'bootstrap'
-gem 'devise'
-gem 'font-awesome-sass'
-gem 'simple_form'
-gem 'autoprefixer-rails'
-gem 'jquery-rails'
-gem 'carrierwave'
-gem 'mini_magick'
-gem 'fog-aws'
 
 group :development do
   gem 'web-console', '>= 3.3.0'
@@ -35,22 +31,10 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'listen', '~> 3.0.5'
-  %w[rspec-core rspec-expectations rspec-mocks rspec-rails rspec-support].each do |lib|
-    gem lib, :git => "https://github.com/rspec/#{lib}.git", :branch => 'master'
-  end
+  gem 'spring'
+  gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'dotenv-rails'
 end
-
-group :test do
-  # Adds support for Capybara system testing and selenium driver
-  gem 'capybara', '>= 2.15', '< 4.0'
-  gem 'selenium-webdriver'
-  # Easy installation and use of chromedriver to run system tests with Chrome
-  gem 'chromedriver-helper'
-  gem 'shoulda-matchers', '~> 3.0', require: false
-  gem 'database_cleaner', '~> 1.5'
-end
-
 RUBY
 
 # Ruby version

@@ -2,6 +2,12 @@ run 'pgrep spring | xargs kill -9'
 
 # GEMFILE
 ########################################
+run 'rm -rf Gemfile'
+run 'touch Gemfile'
+file 'Gemfile', <<-RUBY
+source 'https://rubygems.org'
+ruby '#{RUBY_VERSION}'
+
 gem 'rails', '#{Rails.version}'
 gem 'pg', '~> 0.21'
 gem 'puma'
@@ -45,6 +51,8 @@ group :test do
   gem 'shoulda-matchers', '~> 3.0', require: false
   gem 'database_cleaner', '~> 1.5'
 end
+
+RUBY
 
 # Ruby version
 ########################################

@@ -7,25 +7,21 @@ file 'Gemfile', <<-RUBY
 source 'https://rubygems.org'
 ruby '#{RUBY_VERSION}'
 
-gem 'rails', '#{Rails.version}'
+#{"gem 'bootsnap', require: false" if Rails.version >= "5.2"}
+gem 'devise'
+gem 'jbuilder', '~> 2.0'
 gem 'pg', '~> 0.21'
 gem 'puma'
+gem 'rails', '#{Rails.version}'
 gem 'redis'
+
+gem 'autoprefixer-rails'
+gem 'bootstrap-sass', '~> 3.3'
+gem 'font-awesome-sass', '~> 5.0.9'
+gem 'sassc-rails'
+gem 'simple_form'
 gem 'uglifier'
 gem 'webpacker'
-gem 'jbuilder', '~> 2.5'
-gem 'sass-rails'
-#{"gem 'bootsnap', require: false" if Rails.version >= "5.2"}
-
-gem 'bootstrap'
-gem 'devise'
-gem 'font-awesome-sass'
-gem 'simple_form'
-gem 'autoprefixer-rails'
-gem 'jquery-rails'
-gem 'carrierwave'
-gem 'mini_magick'
-gem 'fog-aws'
 
 group :development do
   gem 'web-console', '>= 3.3.0'
@@ -35,22 +31,10 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'listen', '~> 3.0.5'
-  %w[rspec-core rspec-expectations rspec-mocks rspec-rails rspec-support].each do |lib|
-    gem lib, :git => "https://github.com/rspec/#{lib}.git", :branch => 'master'
-  end
+  gem 'spring'
+  gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'dotenv-rails'
 end
-
-group :test do
-  # Adds support for Capybara system testing and selenium driver
-  gem 'capybara', '>= 2.15', '< 4.0'
-  gem 'selenium-webdriver'
-  # Easy installation and use of chromedriver to run system tests with Chrome
-  gem 'chromedriver-helper'
-  gem 'shoulda-matchers', '~> 3.0', require: false
-  gem 'database_cleaner', '~> 1.5'
-end
-
 RUBY
 
 # Ruby version
@@ -67,12 +51,42 @@ YAML
 ########################################
 run 'rm -rf app/assets/stylesheets'
 run 'rm -rf vendor'
-run 'curl -L https://github.com/Rayancdc/hortatech-templates/raw/master/stylesheets.zip > stylesheets.zip'
-run 'unzip stylesheets.zip -d app/assets && rm stylesheets.zip'
+run 'curl -L https://github.com/lewagon/stylesheets/archive/master.zip > stylesheets.zip'
+run 'unzip stylesheets.zip -d app/assets && rm stylesheets.zip && mv app/assets/rails-stylesheets-master app/assets/stylesheets'
+inject_into_file 'app/assets/stylesheets/config/_bootstrap_variables.scss', before: '// Override other variables below!' do
+"
+// Patch to make simple_form compatible with bootstrap 3
+.invalid-feedback {
+  display: none;
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 80%;
+  color: $red;
+}
+
+.was-validated .form-control:invalid,
+.form-control.is-invalid,
+.was-validated .custom-select:invalid,
+.custom-select.is-invalid {
+  border-color: $red;
+}
+
+.was-validated .form-control:invalid ~ .invalid-feedback,
+.was-validated .form-control:invalid ~ .invalid-tooltip,
+.form-control.is-invalid ~ .invalid-feedback,
+.form-control.is-invalid ~ .invalid-tooltip,
+.was-validated .custom-select:invalid ~ .invalid-feedback,
+.was-validated .custom-select:invalid ~ .invalid-tooltip,
+.custom-select.is-invalid ~ .invalid-feedback,
+.custom-select.is-invalid ~ .invalid-tooltip {
+  display: block;
+}
+
+"
+end
+
 run 'rm app/assets/javascripts/application.js'
 file 'app/assets/javascripts/application.js', <<-JS
-//= require jquery
-//= require jquery_ujs
 //= require rails-ujs
 //= require_tree .
 JS
@@ -88,12 +102,10 @@ file 'app/views/layouts/application.html.erb', <<-HTML
 <!DOCTYPE html>
 <html>
   <head>
-    <title>TODO</title>
-    <link rel="icon" href="<%= image_path 'icon.png' %>">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>TODO</title>
     <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
     <%= action_cable_meta_tag %>
     <%= stylesheet_link_tag 'application', media: 'all' %>
     <%#= stylesheet_pack_tag 'application', media: 'all' %> <!-- Uncomment if you import CSS in app/javascript/packs/application.js -->
@@ -104,7 +116,6 @@ file 'app/views/layouts/application.html.erb', <<-HTML
     <%= yield %>
     <%= javascript_include_tag 'application' %>
     <%= javascript_pack_tag 'application' %>
-    <%= yield(:after_js) %>
   </body>
 </html>
 HTML
@@ -124,15 +135,13 @@ file 'app/views/shared/_flashes.html.erb', <<-HTML
 <% end %>
 HTML
 
-run 'curl -L https://raw.githubusercontent.com/Rayancdc/hortatech-templates/master/_navbar_hortatech.html.erb?token=AkvCHMs_D7irO0bMGOILbz5gRRiRvyMZks5b_qtowA%3D%3D > app/views/shared/_navbar.html.erb'
-run 'curl -L https://raw.githubusercontent.com/Rayancdc/hortatech-templates/master/logo.png?token=AkvCHIR5OA9Eo3m-Y_u2lAn74RNxI0yXks5b_quhwA%3D%3D > app/assets/images/logo.png'
-run 'curl -L https://raw.githubusercontent.com/Rayancdc/hortatech-templates/master/icon.png?token=AkvCHIR5OA9Eo3m-Y_u2lAn74RNxI0yXks5b_quhwA%3D%3D > app/assets/images/icon.png'
-
+run 'curl -L https://raw.githubusercontent.com/lewagon/awesome-navbars/master/templates/_navbar_wagon.html.erb > app/views/shared/_navbar.html.erb'
+run 'curl -L https://raw.githubusercontent.com/lewagon/rails-templates/master/logo.png > app/assets/images/logo.png'
 
 # README
 ########################################
 markdown_file_content = <<-MARKDOWN
-Rails app generated with Hortatech Template, created by Rayancdc.
+Rails app generated with [lewagon/rails-templates](https://github.com/lewagon/rails-templates), created by the [Le Wagon coding bootcamp](https://www.lewagon.com) team.
 MARKDOWN
 file 'README.md', markdown_file_content, force: true
 
@@ -223,7 +232,7 @@ RUBY
   # Webpacker / Yarn
   ########################################
   run 'rm app/javascript/packs/application.js'
-  run 'yarn add bootstrap jquery popper.js typed.js'
+  run 'yarn add jquery bootstrap@3'
   file 'app/javascript/packs/application.js', <<-JS
 import "bootstrap";
 JS
@@ -254,5 +263,5 @@ JS
   ########################################
   git :init
   git add: '.'
-  git commit: "-m 'Initial commit with devise, webpack, jquery, bootstrap 4"
+  git commit: "-m 'Initial commit with devise template from https://github.com/lewagon/rails-templates'"
 end

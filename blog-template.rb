@@ -2,12 +2,6 @@ run 'pgrep spring | xargs kill -9'
 
 # GEMFILE
 ########################################
-run 'rm -rf Gemfile'
-file 'Gemfile', <<-RUBY
-source 'https://rubygems.org'
-ruby '#{RUBY_VERSION}'
-
-#{"gem 'bootsnap', require: false" if Rails.version >= "5.2"}
 gem 'rails', '#{Rails.version}'
 gem 'pg', '~> 0.21'
 gem 'puma'
@@ -16,7 +10,7 @@ gem 'uglifier'
 gem 'webpacker'
 gem 'jbuilder', '~> 2.5'
 gem 'sass-rails'
-gem 'bootsnap', '>= 1.1.0', require: false
+#{"gem 'bootsnap', require: false" if Rails.version >= "5.2"}
 
 gem 'bootstrap'
 gem 'devise'
@@ -51,8 +45,6 @@ group :test do
   gem 'shoulda-matchers', '~> 3.0', require: false
   gem 'database_cleaner', '~> 1.5'
 end
-
-RUBY
 
 # Ruby version
 ########################################

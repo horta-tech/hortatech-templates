@@ -1,0 +1,11 @@
+.yellow-btn {
+  padding: 8px 16px;
+  background-color: $dark-yellow ;
+  transition: background 0.3s ease;
+  font-size: 0.9em;
+  font-weight: bold;
+  text-align: center;
+  &:hover {
+    background-color: lighten( $dark-yellow, 2% ) ;
+  }
+}

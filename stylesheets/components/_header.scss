@@ -1,0 +1,38 @@
+.grey-header {
+  color: $dark-yellow;
+  background-color: $dark-grey;
+  height: 80px;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  min-width: 800px;
+  font-weight: black;
+  margin: 0;
+  padding: 0;
+}
+
+.header-item {
+  flex-grow: 1;
+  margin-left: 10px;
+}
+
+.grey-header h3 {
+  justify-self: flex-start;
+
+  padding-left: 10px;
+}
+
+.grey-header i {
+  flex: 0 0 20px;
+  align-self: flex-center;
+  justify-self: flex-end;
+  padding-right: 15px;
+}
+
+.social-media {
+  padding: 0 10px;
+
+  &:last-child {
+    margin-right: 10px;
+  }
+}

@@ -9,6 +9,6 @@ rails new \
   --skip-coffee \
   --skip-turbolinks \
   --skip-spring \
-  -m https://raw.githubusercontent.com/Rayancdc/hortatech-templates/master/blog-template.rb?token=AkvCHNJRLj-AaVMDzVuXpjO6x0qnrzmsks5b_tV_wA%3D%3D \
+  -m https://raw.githubusercontent.com/Rayancdc/hortatech-templates/master/blog-template.rb?token=AkvCHIpc4HdbCQbAT5ytGEfy6p9pccAaks5cPgtRwA%3D%3D \
   name
 ```

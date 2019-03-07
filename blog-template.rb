@@ -53,7 +53,7 @@ YAML
 ########################################
 run 'rm -rf app/assets/stylesheets'
 run 'rm -rf vendor'
-run 'curl -L https://github.com/Rayancdc/stylesheets/archive/master.zip > stylesheets.zip'
+run 'curl -L https://github.com/rayancastro/stylesheets/archive/master.zip > stylesheets.zip'
 run 'unzip stylesheets.zip -d app/assets && rm stylesheets.zip && mv app/assets/stylesheets-master app/assets/stylesheets'
 run 'rm app/assets/javascripts/application.js'
 file 'app/assets/javascripts/application.js', <<-JS
@@ -110,15 +110,15 @@ file 'app/views/shared/_flashes.html.erb', <<-HTML
 <% end %>
 HTML
 
-run 'curl -L https://raw.githubusercontent.com/Rayancdc/hortatech-templates/master/_navbar_hortatech.html.erb?token=AkvCHMs_D7irO0bMGOILbz5gRRiRvyMZks5b_qtowA%3D%3D > app/views/shared/_navbar.html.erb'
-run 'curl -L https://raw.githubusercontent.com/Rayancdc/hortatech-templates/master/logo.png?token=AkvCHIR5OA9Eo3m-Y_u2lAn74RNxI0yXks5b_quhwA%3D%3D > app/assets/images/logo.png'
-run 'curl -L https://raw.githubusercontent.com/Rayancdc/hortatech-templates/master/icon.png?token=AkvCHIR5OA9Eo3m-Y_u2lAn74RNxI0yXks5b_quhwA%3D%3D > app/assets/images/icon.png'
+run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/_navbar_hortatech.html.erb > app/views/shared/_navbar.html.erb'
+run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/logo.png > app/assets/images/logo.png'
+run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/icon.png > app/assets/images/icon.png'
 
 
 # README
 ########################################
 markdown_file_content = <<-MARKDOWN
-Rails app generated with Hortatech Template, created by Rayancdc.
+Rails app generated with Hortatech Template, created by rayancastro.
 MARKDOWN
 file 'README.md', markdown_file_content, force: true
 

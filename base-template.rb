@@ -53,8 +53,13 @@ YAML
 ########################################
 run 'rm -rf app/assets/stylesheets'
 run 'rm -rf vendor'
+
 run 'curl -L https://github.com/rayancastro/stylesheets/archive/master.zip > stylesheets.zip'
 run 'unzip stylesheets.zip -d app/assets && rm stylesheets.zip && mv app/assets/stylesheets-master app/assets/stylesheets'
+
+run 'curl -L https://github.com/rayancastro/fonts/archive/master.zip > fonts.zip'
+run 'unzip fonts.zip -d app/assets && rm fonts.zip && mv app/assets/fonts-master app/assets/fonts'
+
 run 'rm app/assets/javascripts/application.js'
 file 'app/assets/javascripts/application.js', <<-JS
 //= require jquery
@@ -74,7 +79,7 @@ file 'app/views/layouts/application.html.erb', <<-HTML
 <!DOCTYPE html>
 <html>
   <head>
-    <title>TODO</title>
+    <title>Hortatech Template</title>
     <link rel="icon" href="<%= image_path 'icon.png' %>">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta charset="UTF-8">
@@ -111,6 +116,7 @@ file 'app/views/shared/_flashes.html.erb', <<-HTML
 HTML
 
 run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/_navbar_hortatech.html.erb > app/views/shared/_navbar.html.erb'
+run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/_footer_hortatech.html.erb > app/views/shared/_footer.html.erb'
 run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/logo.png > app/assets/images/logo.png'
 run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/icon.png > app/assets/images/icon.png'
 
@@ -189,6 +195,13 @@ RUBY
   rails_command 'db:migrate'
   generate('devise:views')
 
+  run 'rm app/views/devise/registrations/edit.html.erb'
+  run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/devise/registrations/edit.html.erb > app/views/devise/registrations/edit.html.erb'
+  run 'rm app/views/devise/registrations/new.html.erb'
+  run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/devise/registrations/new.html.erb > app/views/devise/registrations/new.html.erb'
+  run 'rm app/views/devise/sessions/new.html.erb'
+  run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/devise/sessions/new.html.erb > app/views/devise/sessions/new.html.erb'
+
   # Pages Controller
   ########################################
   run 'rm app/controllers/pages_controller.rb'
@@ -234,7 +247,7 @@ JS
 
   # Rubocop
   ########################################
-  run 'curl -L https://raw.githubusercontent.com/lewagon/rails-templates/master/.rubocop.yml > .rubocop.yml'
+  run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/.rubocop.yml > .rubocop.yml'
 
   # Git
   ########################################

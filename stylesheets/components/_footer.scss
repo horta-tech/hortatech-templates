@@ -1,0 +1,41 @@
+$footer-height: 140px;
+
+#footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: $footer-height;
+  background-color: $dark-grey;
+  color: $white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+body {
+  position: relative !important;
+  min-height: 100vh !important;
+  padding-bottom: $footer-height !important;
+}
+
+.social-button {
+  height: 34px;
+  width: 34px;
+  border-radius: 20px;
+  font-size: 1.1em;
+  margin: 0 16px;
+  background-color: rgb(40, 40, 40);
+  padding: 8px;
+}
+
+
+a .social-button {
+  color: white;
+  text-decoration: none;
+}
+
+a:hover .social-button{
+  color: white;
+    background-color: rgb(15, 15, 15);
+}

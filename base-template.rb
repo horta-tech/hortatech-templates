@@ -181,6 +181,20 @@ TXT
   generate('devise:install')
   generate('devise', 'User')
 
+  run 'rm app/models/user.rb'
+  file 'app/models/user.rb', <<-RUBY
+class User < ApplicationRecord
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :validatable
+
+  def admin?
+    false
+  end
+end
+RUBY  
+
   # App controller
   ########################################
   run 'rm app/controllers/application_controller.rb'

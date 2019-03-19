@@ -117,10 +117,10 @@ file 'app/views/shared/_flashes.html.erb', <<-HTML
 <% end %>
 HTML
 
-run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/_navbar_hortatech.html.erb > app/views/shared/_navbar.html.erb'
-run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/_footer_hortatech.html.erb > app/views/shared/_footer.html.erb'
-run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/logo.png > app/assets/images/logo.png'
-run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/favicon.png > app/assets/images/favicon.png'
+run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/app/views/shared/_navbar_hortatech.html.erb > app/views/shared/_navbar.html.erb'
+run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/app/views/shared/_footer_hortatech.html.erb > app/views/shared/_footer.html.erb'
+run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/app/assets/images/logo.png > app/assets/images/logo.png'
+run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/app/assets/images/favicon.png > app/assets/images/favicon.png'
 
 
 # README
@@ -187,27 +187,13 @@ TXT
   generate('devise', 'User')
 
   run 'rm app/models/user.rb'
-  file 'app/models/user.rb', <<-RUBY
-class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
-  def admin?
-    false
-  end
-end
-RUBY  
+  run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/app/models/user.rb > app/models/user.rb'
 
   # App controller
   ########################################
   run 'rm app/controllers/application_controller.rb'
-  file 'app/controllers/application_controller.rb', <<-RUBY
-class ApplicationController < ActionController::Base
-  protect_from_forgery with: :exception
-  before_action :authenticate_user!
-end
-RUBY
+  run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/app/controllers/application_controller.rb > app/controllers/application_controller.rb'
+
 
   # migrate + devise views
   ########################################
@@ -215,22 +201,17 @@ RUBY
   generate('devise:views')
 
   run 'rm app/views/devise/registrations/edit.html.erb'
-  run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/devise/registrations/edit.html.erb > app/views/devise/registrations/edit.html.erb'
+  run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/app/views/devise/registrations/edit.html.erb > app/views/devise/registrations/edit.html.erb'
   run 'rm app/views/devise/registrations/new.html.erb'
-  run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/devise/registrations/new.html.erb > app/views/devise/registrations/new.html.erb'
+  run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/app/views/devise/registrations/new.html.erb > app/views/devise/registrations/new.html.erb'
   run 'rm app/views/devise/sessions/new.html.erb'
-  run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/devise/sessions/new.html.erb > app/views/devise/sessions/new.html.erb'
+  run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/app/views/devise/sessions/new.html.erb > app/views/devise/sessions/new.html.erb'
 
   # Pages Controller
   ########################################
   run 'rm app/controllers/pages_controller.rb'
-  file 'app/controllers/pages_controller.rb', <<-RUBY
-class PagesController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:home]
-  def home
-  end
-end
-RUBY
+  run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/app/controllers/pages_controller.rb > app/controllers/pages_controller.rb'
+
 
   # Environments
   ########################################

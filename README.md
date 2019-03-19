@@ -6,7 +6,7 @@
 rails new \
   -T \
   --database postgresql \
-  --webpack \
+  --webpack=react \
   --skip-coffee \
   --skip-turbolinks \
   --skip-spring \

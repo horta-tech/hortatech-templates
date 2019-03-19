@@ -222,6 +222,7 @@ TXT
   ########################################
   run 'rm app/javascript/packs/application.js'
   run 'yarn add bootstrap jquery popper.js typed.js'
+  run 'yarn add history redux react-redux react-router-dom redux-form redux-promise redux-logger'
   file 'app/javascript/packs/application.js', <<-JS
 import "bootstrap";
 JS

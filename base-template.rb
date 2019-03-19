@@ -188,27 +188,26 @@ after_bundle do
 
   run 'rm app/models/user.rb'
   file 'app/models/user.rb', <<-RUBY
-class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
-
-  def admin?
-    false
+  class User < ApplicationRecord
+    # Include default devise modules. Others available are:
+    # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+    devise :database_authenticatable, :registerable,
+          :recoverable, :rememberable, :validatable
+    def admin?
+      false
+    end
   end
-end
-RUBY  
+  RUBY  
 
   # App controller
   ########################################
   run 'rm app/controllers/application_controller.rb'
   file 'app/controllers/application_controller.rb', <<-RUBY
-class ApplicationController < ActionController::Base
-  protect_from_forgery with: :exception
-  before_action :authenticate_user!
-end
-RUBY
+  class ApplicationController < ActionController::Base
+    protect_from_forgery with: :exception
+    before_action :authenticate_user!
+  end
+  RUBY
 
   # migrate + devise views
   ########################################
@@ -226,13 +225,12 @@ RUBY
   ########################################
   run 'rm app/controllers/pages_controller.rb'
   file 'app/controllers/pages_controller.rb', <<-RUBY
-class PagesController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:home]
-
-  def home
+  class PagesController < ApplicationController
+    skip_before_action :authenticate_user!, only: [:home]
+    def home
+    end
   end
-end
-RUBY
+  RUBY
 
   # Environments
   ########################################
@@ -244,21 +242,21 @@ RUBY
   run 'rm app/javascript/packs/application.js'
   run 'yarn add bootstrap jquery popper.js typed.js'
   file 'app/javascript/packs/application.js', <<-JS
-import "bootstrap";
-JS
+  import "bootstrap";
+  JS
 
   inject_into_file 'config/webpack/environment.js', before: 'module.exports' do
-<<-JS
-// Bootstrap 3 has a dependency over jQuery:
-const webpack = require('webpack')
-environment.plugins.prepend('Provide',
-  new webpack.ProvidePlugin({
-    $: 'jquery',
-    jQuery: 'jquery'
-  })
-)
+  <<-JS
+  // Bootstrap 3 has a dependency over jQuery:
+  const webpack = require('webpack')
+  environment.plugins.prepend('Provide',
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery'
+    })
+  )
 
-JS
+  JS
   end
 
   # Dotenv

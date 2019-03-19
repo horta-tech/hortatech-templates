@@ -146,130 +146,130 @@ environment generators
 # AFTER BUNDLE
 ########################################
 after_bundle do
-  # Generators: db + simple form + pages controller
-  ########################################
-  rails_command 'db:drop db:create db:migrate'
-  generate('simple_form:install', '--bootstrap')
-  generate(:controller, 'pages', 'home', '--skip-routes', '--no-test-framework')
-  # RSPEC Install
-  ########################################
-  generate('rspec:install')
-  # Routes
-  ########################################
-  route "root to: 'pages#home'"
+# Generators: db + simple form + pages controller
+########################################
+rails_command 'db:drop db:create db:migrate'
+generate('simple_form:install', '--bootstrap')
+generate(:controller, 'pages', 'home', '--skip-routes', '--no-test-framework')
+# RSPEC Install
+########################################
+generate('rspec:install')
+# Routes
+########################################
+route "root to: 'pages#home'"
 
-  # Git ignore
-  ########################################
-  run 'rm .gitignore'
-  file '.gitignore', <<-TXT
-  .bundle
-  log/*.log
-  tmp/**/*
-  tmp/*
-  !log/.keep
-  !tmp/.keep
-  *.swp
-  .DS_Store
-  public/assets
-  public/packs
-  public/packs-test
-  node_modules
-  yarn-error.log
-  .byebug_history
-  .env*
-  TXT
+# Git ignore
+########################################
+run 'rm .gitignore'
+file '.gitignore', <<-TXT
+.bundle
+log/*.log
+tmp/**/*
+tmp/*
+!log/.keep
+!tmp/.keep
+*.swp
+.DS_Store
+public/assets
+public/packs
+public/packs-test
+node_modules
+yarn-error.log
+.byebug_history
+.env*
+TXT
 
 
 
-  # Devise install + user
-  ########################################
-  generate('devise:install')
-  generate('devise', 'User')
+# Devise install + user
+########################################
+generate('devise:install')
+generate('devise', 'User')
 
-  run 'rm app/models/user.rb'
-  file 'app/models/user.rb', <<-RUBY
-  class User < ApplicationRecord
-    # Include default devise modules. Others available are:
-    # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-    devise :database_authenticatable, :registerable,
-          :recoverable, :rememberable, :validatable
-    def admin?
-      false
-    end
+run 'rm app/models/user.rb'
+file 'app/models/user.rb', <<-RUBY
+class User < ApplicationRecord
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  devise :database_authenticatable, :registerable,
+        :recoverable, :rememberable, :validatable
+  def admin?
+    false
   end
-  RUBY  
+end
+RUBY  
 
-  # App controller
-  ########################################
-  run 'rm app/controllers/application_controller.rb'
-  file 'app/controllers/application_controller.rb', <<-RUBY
-  class ApplicationController < ActionController::Base
-    protect_from_forgery with: :exception
-    before_action :authenticate_user!
+# App controller
+########################################
+run 'rm app/controllers/application_controller.rb'
+file 'app/controllers/application_controller.rb', <<-RUBY
+class ApplicationController < ActionController::Base
+  protect_from_forgery with: :exception
+  before_action :authenticate_user!
+end
+RUBY
+
+# migrate + devise views
+########################################
+rails_command 'db:migrate'
+generate('devise:views')
+
+run 'rm app/views/devise/registrations/edit.html.erb'
+run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/devise/registrations/edit.html.erb > app/views/devise/registrations/edit.html.erb'
+run 'rm app/views/devise/registrations/new.html.erb'
+run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/devise/registrations/new.html.erb > app/views/devise/registrations/new.html.erb'
+run 'rm app/views/devise/sessions/new.html.erb'
+run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/devise/sessions/new.html.erb > app/views/devise/sessions/new.html.erb'
+
+# Pages Controller
+########################################
+run 'rm app/controllers/pages_controller.rb'
+file 'app/controllers/pages_controller.rb', <<-RUBY
+class PagesController < ApplicationController
+  skip_before_action :authenticate_user!, only: [:home]
+  def home
   end
-  RUBY
+end
+RUBY
 
-  # migrate + devise views
-  ########################################
-  rails_command 'db:migrate'
-  generate('devise:views')
+# Environments
+########################################
+environment 'config.action_mailer.default_url_options = { host: "http://localhost:3000" }', env: 'development'
+environment 'config.action_mailer.default_url_options = { host: "http://TODO_PUT_YOUR_DOMAIN_HERE" }', env: 'production'
 
-  run 'rm app/views/devise/registrations/edit.html.erb'
-  run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/devise/registrations/edit.html.erb > app/views/devise/registrations/edit.html.erb'
-  run 'rm app/views/devise/registrations/new.html.erb'
-  run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/devise/registrations/new.html.erb > app/views/devise/registrations/new.html.erb'
-  run 'rm app/views/devise/sessions/new.html.erb'
-  run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/devise/sessions/new.html.erb > app/views/devise/sessions/new.html.erb'
+# Webpacker / Yarn
+########################################
+run 'rm app/javascript/packs/application.js'
+run 'yarn add bootstrap jquery popper.js typed.js'
+file 'app/javascript/packs/application.js', <<-JS
+import "bootstrap";
+JS
 
-  # Pages Controller
-  ########################################
-  run 'rm app/controllers/pages_controller.rb'
-  file 'app/controllers/pages_controller.rb', <<-RUBY
-  class PagesController < ApplicationController
-    skip_before_action :authenticate_user!, only: [:home]
-    def home
-    end
-  end
-  RUBY
+inject_into_file 'config/webpack/environment.js', before: 'module.exports' do
+<<-JS
+// Bootstrap 3 has a dependency over jQuery:
+const webpack = require('webpack')
+environment.plugins.prepend('Provide',
+  new webpack.ProvidePlugin({
+    $: 'jquery',
+    jQuery: 'jquery'
+  })
+)
 
-  # Environments
-  ########################################
-  environment 'config.action_mailer.default_url_options = { host: "http://localhost:3000" }', env: 'development'
-  environment 'config.action_mailer.default_url_options = { host: "http://TODO_PUT_YOUR_DOMAIN_HERE" }', env: 'production'
+JS
+end
 
-  # Webpacker / Yarn
-  ########################################
-  run 'rm app/javascript/packs/application.js'
-  run 'yarn add bootstrap jquery popper.js typed.js'
-  file 'app/javascript/packs/application.js', <<-JS
-  import "bootstrap";
-  JS
+# Dotenv
+########################################
+run 'touch .env'
 
-  inject_into_file 'config/webpack/environment.js', before: 'module.exports' do
-  <<-JS
-  // Bootstrap 3 has a dependency over jQuery:
-  const webpack = require('webpack')
-  environment.plugins.prepend('Provide',
-    new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery'
-    })
-  )
+# Rubocop
+########################################
+run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/.rubocop.yml > .rubocop.yml'
 
-  JS
-  end
-
-  # Dotenv
-  ########################################
-  run 'touch .env'
-
-  # Rubocop
-  ########################################
-  run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/.rubocop.yml > .rubocop.yml'
-
-  # Git
-  ########################################
-  git :init
-  git add: '.'
-  git commit: "-m 'Initial commit with devise, webpack, jquery, bootstrap 4'"
+# Git
+########################################
+git :init
+git add: '.'
+git commit: "-m 'Initial commit with devise, webpack, jquery, bootstrap 4'"
 end

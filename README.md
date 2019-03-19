@@ -4,6 +4,7 @@
 
 ```
 rails new \
+  -T \
   --database postgresql \
   --webpack \
   --skip-coffee \

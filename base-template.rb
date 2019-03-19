@@ -32,6 +32,7 @@ group :development do
 end
 
 group :development, :test do
+  gem 'rspec-rails'
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'listen', '~> 3.0.5'
@@ -80,7 +81,7 @@ file 'app/views/layouts/application.html.erb', <<-HTML
 <html>
   <head>
     <title>Hortatech Template</title>
-    <link rel="icon" href="<%= image_path 'icon.png' %>">
+    <link rel="icon" href="<%= image_path 'favicon.png' %>">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta charset="UTF-8">
     <%= csrf_meta_tags %>
@@ -119,7 +120,7 @@ HTML
 run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/_navbar_hortatech.html.erb > app/views/shared/_navbar.html.erb'
 run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/_footer_hortatech.html.erb > app/views/shared/_footer.html.erb'
 run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/logo.png > app/assets/images/logo.png'
-run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/icon.png > app/assets/images/icon.png'
+run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/favicon.png > app/assets/images/favicon.png'
 
 
 # README
@@ -150,7 +151,9 @@ after_bundle do
   rails_command 'db:drop db:create db:migrate'
   generate('simple_form:install', '--bootstrap')
   generate(:controller, 'pages', 'home', '--skip-routes', '--no-test-framework')
-
+  # RSPEC Install
+  ########################################
+  generate('rspec:install')
   # Routes
   ########################################
   route "root to: 'pages#home'"
@@ -159,22 +162,24 @@ after_bundle do
   ########################################
   run 'rm .gitignore'
   file '.gitignore', <<-TXT
-.bundle
-log/*.log
-tmp/**/*
-tmp/*
-!log/.keep
-!tmp/.keep
-*.swp
-.DS_Store
-public/assets
-public/packs
-public/packs-test
-node_modules
-yarn-error.log
-.byebug_history
-.env*
-TXT
+  .bundle
+  log/*.log
+  tmp/**/*
+  tmp/*
+  !log/.keep
+  !tmp/.keep
+  *.swp
+  .DS_Store
+  public/assets
+  public/packs
+  public/packs-test
+  node_modules
+  yarn-error.log
+  .byebug_history
+  .env*
+  TXT
+
+
 
   # Devise install + user
   ########################################

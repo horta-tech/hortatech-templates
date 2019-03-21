@@ -7,7 +7,7 @@
 
 ### - Componentes Horta
 ### - Bootstrap 4
-### - Webpaack
+### - Webpack
 
 ```
 rails new \
@@ -22,9 +22,12 @@ rails new \
 ```
 
 
-# NEW RAILS BASE REACT SETUP
+# RAILS BASE REACT TEMPLATE
 
-## Substitua o name pelo nome do projeto e execute a linha abaixo para utilizar o base template
+### - Componentes Horta
+### - Bootstrap 4
+### - Webpack
+### - React
 
 ```
 rails new \

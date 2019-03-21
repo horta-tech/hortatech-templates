@@ -7,32 +7,35 @@ file 'Gemfile', <<-RUBY
 source 'https://rubygems.org'
 ruby '#{RUBY_VERSION}'
 
-#{"gem 'bootsnap', require: false" if Rails.version >= "5.2"}
-gem 'devise'
-gem 'jbuilder', '~> 2.0'
+gem 'rails', '#{Rails.version}'
 gem 'pg', '~> 0.21'
 gem 'puma'
-gem 'rails', '#{Rails.version}'
 gem 'redis'
-
-gem 'autoprefixer-rails'
-gem 'bootstrap-sass', '~> 3.3'
-gem 'font-awesome-sass', '~> 5.0.9'
-gem 'sassc-rails'
-gem 'simple_form'
 gem 'uglifier'
 gem 'webpacker'
+gem 'jbuilder', '~> 2.5'
+gem 'sass-rails'
+#{"gem 'bootsnap', require: false" if Rails.version >= "5.2"}
+
+gem 'bootstrap'
+gem 'devise'
+gem 'font-awesome-sass'
+gem 'simple_form'
+gem 'autoprefixer-rails'
+gem 'jquery-rails'
+gem 'carrierwave'
+gem 'mini_magick'
+gem 'fog-aws'
 
 group :development do
   gem 'web-console', '>= 3.3.0'
 end
 
 group :development, :test do
+  gem 'rspec-rails'
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'listen', '~> 3.0.5'
-  gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'dotenv-rails'
 end
 RUBY
@@ -51,42 +54,17 @@ YAML
 ########################################
 run 'rm -rf app/assets/stylesheets'
 run 'rm -rf vendor'
-run 'curl -L https://github.com/lewagon/stylesheets/archive/master.zip > stylesheets.zip'
-run 'unzip stylesheets.zip -d app/assets && rm stylesheets.zip && mv app/assets/rails-stylesheets-master app/assets/stylesheets'
-inject_into_file 'app/assets/stylesheets/config/_bootstrap_variables.scss', before: '// Override other variables below!' do
-"
-// Patch to make simple_form compatible with bootstrap 3
-.invalid-feedback {
-  display: none;
-  width: 100%;
-  margin-top: 0.25rem;
-  font-size: 80%;
-  color: $red;
-}
 
-.was-validated .form-control:invalid,
-.form-control.is-invalid,
-.was-validated .custom-select:invalid,
-.custom-select.is-invalid {
-  border-color: $red;
-}
+run 'curl -L https://github.com/rayancastro/stylesheets/archive/master.zip > stylesheets.zip'
+run 'unzip stylesheets.zip -d app/assets && rm stylesheets.zip && mv app/assets/stylesheets-master app/assets/stylesheets'
 
-.was-validated .form-control:invalid ~ .invalid-feedback,
-.was-validated .form-control:invalid ~ .invalid-tooltip,
-.form-control.is-invalid ~ .invalid-feedback,
-.form-control.is-invalid ~ .invalid-tooltip,
-.was-validated .custom-select:invalid ~ .invalid-feedback,
-.was-validated .custom-select:invalid ~ .invalid-tooltip,
-.custom-select.is-invalid ~ .invalid-feedback,
-.custom-select.is-invalid ~ .invalid-tooltip {
-  display: block;
-}
-
-"
-end
+run 'curl -L https://github.com/rayancastro/fonts/archive/master.zip > fonts.zip'
+run 'unzip fonts.zip -d app/assets && rm fonts.zip && mv app/assets/fonts-master app/assets/fonts'
 
 run 'rm app/assets/javascripts/application.js'
 file 'app/assets/javascripts/application.js', <<-JS
+//= require jquery
+//= require jquery_ujs
 //= require rails-ujs
 //= require_tree .
 JS
@@ -102,10 +80,12 @@ file 'app/views/layouts/application.html.erb', <<-HTML
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
+    <title>Hortatech Template</title>
+    <link rel="icon" href="<%= image_path 'favicon.png' %>">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>TODO</title>
+    <meta charset="UTF-8">
     <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
     <%= action_cable_meta_tag %>
     <%= stylesheet_link_tag 'application', media: 'all' %>
     <%#= stylesheet_pack_tag 'application', media: 'all' %> <!-- Uncomment if you import CSS in app/javascript/packs/application.js -->
@@ -114,8 +94,10 @@ file 'app/views/layouts/application.html.erb', <<-HTML
     <%= render 'shared/navbar' %>
     <%= render 'shared/flashes' %>
     <%= yield %>
+    <%= render 'shared/footer' %>
     <%= javascript_include_tag 'application' %>
     <%= javascript_pack_tag 'application' %>
+    <%= yield(:after_js) %>
   </body>
 </html>
 HTML
@@ -135,13 +117,16 @@ file 'app/views/shared/_flashes.html.erb', <<-HTML
 <% end %>
 HTML
 
-run 'curl -L https://raw.githubusercontent.com/lewagon/awesome-navbars/master/templates/_navbar_wagon.html.erb > app/views/shared/_navbar.html.erb'
-run 'curl -L https://raw.githubusercontent.com/lewagon/rails-templates/master/logo.png > app/assets/images/logo.png'
+run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/app/views/shared/_navbar_hortatech.html.erb > app/views/shared/_navbar.html.erb'
+run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/app/views/shared/_footer_hortatech.html.erb > app/views/shared/_footer.html.erb'
+run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/app/assets/images/logo.png > app/assets/images/logo.png'
+run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/app/assets/images/favicon.png > app/assets/images/favicon.png'
+
 
 # README
 ########################################
 markdown_file_content = <<-MARKDOWN
-Rails app generated with [lewagon/rails-templates](https://github.com/lewagon/rails-templates), created by the [Le Wagon coding bootcamp](https://www.lewagon.com) team.
+Rails app generated with Hortatech Template, created by rayancastro.
 MARKDOWN
 file 'README.md', markdown_file_content, force: true
 
@@ -166,7 +151,9 @@ after_bundle do
   rails_command 'db:drop db:create db:migrate'
   generate('simple_form:install', '--bootstrap')
   generate(:controller, 'pages', 'home', '--skip-routes', '--no-test-framework')
-
+  # RSPEC Install
+  ########################################
+  generate('rspec:install')
   # Routes
   ########################################
   route "root to: 'pages#home'"
@@ -192,37 +179,39 @@ yarn-error.log
 .env*
 TXT
 
+
+
   # Devise install + user
   ########################################
   generate('devise:install')
   generate('devise', 'User')
 
+  run 'rm app/models/user.rb'
+  run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/app/models/user.rb > app/models/user.rb'
+
   # App controller
   ########################################
   run 'rm app/controllers/application_controller.rb'
-  file 'app/controllers/application_controller.rb', <<-RUBY
-class ApplicationController < ActionController::Base
-  protect_from_forgery with: :exception
-  before_action :authenticate_user!
-end
-RUBY
+  run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/app/controllers/application_controller.rb > app/controllers/application_controller.rb'
+
 
   # migrate + devise views
   ########################################
   rails_command 'db:migrate'
   generate('devise:views')
 
+  run 'rm app/views/devise/registrations/edit.html.erb'
+  run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/app/views/devise/registrations/edit.html.erb > app/views/devise/registrations/edit.html.erb'
+  run 'rm app/views/devise/registrations/new.html.erb'
+  run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/app/views/devise/registrations/new.html.erb > app/views/devise/registrations/new.html.erb'
+  run 'rm app/views/devise/sessions/new.html.erb'
+  run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/app/views/devise/sessions/new.html.erb > app/views/devise/sessions/new.html.erb'
+
   # Pages Controller
   ########################################
   run 'rm app/controllers/pages_controller.rb'
-  file 'app/controllers/pages_controller.rb', <<-RUBY
-class PagesController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:home]
+  run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/app/controllers/pages_controller.rb > app/controllers/pages_controller.rb'
 
-  def home
-  end
-end
-RUBY
 
   # Environments
   ########################################
@@ -232,7 +221,7 @@ RUBY
   # Webpacker / Yarn
   ########################################
   run 'rm app/javascript/packs/application.js'
-  run 'yarn add jquery bootstrap@3'
+  run 'yarn add bootstrap jquery popper.js typed.js'
   file 'app/javascript/packs/application.js', <<-JS
 import "bootstrap";
 JS
@@ -257,11 +246,11 @@ JS
 
   # Rubocop
   ########################################
-  run 'curl -L https://raw.githubusercontent.com/lewagon/rails-templates/master/.rubocop.yml > .rubocop.yml'
+  run 'curl -L https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/.rubocop.yml > .rubocop.yml'
 
   # Git
   ########################################
   git :init
   git add: '.'
-  git commit: "-m 'Initial commit with devise template from https://github.com/lewagon/rails-templates'"
+  git commit: "-m 'Initial commit with devise, webpack, jquery, bootstrap 4'"
 end

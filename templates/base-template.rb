@@ -64,7 +64,6 @@ run 'unzip fonts.zip -d app/assets && rm fonts.zip && mv app/assets/fonts-master
 run 'rm app/assets/javascripts/application.js'
 file 'app/assets/javascripts/application.js', <<-JS
 //= require jquery
-//= require jquery_ujs
 //= require rails-ujs
 //= require_tree .
 JS
@@ -133,11 +132,15 @@ file 'README.md', markdown_file_content, force: true
 # Generators
 ########################################
 generators = <<-RUBY
-config.generators do |generate|
-      generate.assets false
-      generate.helper false
-      generate.test_framework  :test_unit, fixture: false
-    end
+  config.generators do |generate|
+    generate.test_framework :rspec,
+      view_specs: false,
+      helper_specs: false,
+      routing_specs: false,
+      request_specs: false
+    generate.assets false
+    generate.helper false
+  end
 RUBY
 
 environment generators

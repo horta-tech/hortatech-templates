@@ -8,6 +8,7 @@
 ### - Componentes Horta
 ### - Bootstrap 4
 ### - Webpack
+### - Devise, Simple Form, Nokogiri, Carrierwave, Fog-aws, Rspec-rails
 
 ```
 rails new \
@@ -15,8 +16,6 @@ rails new \
   --database postgresql \
   --webpack \
   --skip-coffee \
-  --skip-turbolinks \
-  --skip-spring \
   -m https://raw.githubusercontent.com/rayancastro/hortatech-templates/master/templates/base-template.rb \
   name
 ```
